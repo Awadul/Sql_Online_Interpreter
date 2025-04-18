@@ -1,24 +1,22 @@
 import express from "express";
 import cors from "cors";
-// import dotenv from "dotenv";
-import supabase from "./services/supabase-client.js";
-import { validateQuery , executeQuery, getSchema } from "./utils/supabase-request-handler.js";
-// dotenv.config();
+import { validateQuery, executeQuery, getSchema } from "./utils/supabase-request-handler.js";
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-app.get("/ping" , (req , res) => {
-    res.send("Pong");
+// app.get("/ping", (req, res) => {
+//     res.send("Pong");
+// })
+
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 })
 
-app.listen(8080 , () => {
-    console.log("Server is running on port 3000");
-})
-
-app.post("/validate-query" , async (req , res) => {
+app.post("/validate-query", async (req, res) => {
 
     try {
         const { query } = req.body;
@@ -29,7 +27,7 @@ app.post("/validate-query" , async (req , res) => {
     }
 })
 
-app.post("/api/query/execute" , async (req , res) => {
+app.post("/api/query/execute", async (req, res) => {
     try {
         const { query } = req.body;
         const result = await executeQuery(query);
@@ -39,7 +37,7 @@ app.post("/api/query/execute" , async (req , res) => {
     }
 })
 
-app.get("/api/query/schema" , async (req , res) => {
+app.get("/api/query/schema", async (req, res) => {
     const schema = await getSchema();
     // console.log("schema data" , schema);
     if (schema.error) {
@@ -49,7 +47,7 @@ app.get("/api/query/schema" , async (req , res) => {
     }
 })
 
-app.get("/api/connection/test" , async (req , res) => {
+app.get("/api/connection/test", async (req, res) => {
     try {
         return res.status(200).json({ message: "Connection successful" });
     } catch (error) {
